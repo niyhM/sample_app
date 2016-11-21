@@ -8,6 +8,14 @@ class UsersController < ApplicationController
 
   def new
   	@user = User.new()
+
+  	#---------------------------------------------------------------
+  	if Rails.env == 'development'
+  		@user.email = "#{('a'..'g').to_a.shuffle.join}" +
+  					  "#{(0..9).to_a.shuffle[0..2].join}@gmail.com"
+  		@user.name = "#{('a'..'z').to_a.shuffle[0..7].join}"
+  	end
+  	#---------------------------------------------------------------
   end
 
   def create
