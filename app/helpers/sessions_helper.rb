@@ -1,3 +1,8 @@
+#- Do note: this sessions helper class is for the management of Session hash
+#- and the management of cookies ONLY! That is why, you'll notice, we never
+#- call anything regarding the model. Our remember function saves the cookie
+#- the model remember function saves the actual field in the DB
+
 module SessionsHelper
 
   # Logs in the given user.
