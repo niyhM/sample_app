@@ -1,6 +1,12 @@
 require 'pry'
 
 class UsersController < ApplicationController
+  before_action :logged_in_user, only: [:edit, :update, :index]
+  before_action :correct_user, only: [:edit, :update]
+
+  def index 
+    @users = User.all
+  end
 
   def show
     @user = User.find(params[:id])
@@ -29,11 +35,41 @@ class UsersController < ApplicationController
   	end
   end
 
-  
+  def update
+    if @user.update_attributes(user_params)
+      flash[:success] = "Profile Updated"
+      redirect_to @user
+    else
+      render 'edit'
+    end
+  end
+
+
+  def edit
+  end
 
   private
 
   	def user_params
   		params.require(:user).permit(:name, :email, :password, :password_confirmation)
   	end
+
+
+    #Before Filters
+
+    #confirms a logged-in user
+    def logged_in_user
+      unless logged_in?
+        store_location
+        flash[:danger] = "Please log in."
+        redirect_to login_url
+      end
+    end
+
+    # Confirms the correct user.
+    def correct_user
+      @user = User.find(params[:id])
+      redirect_to(root_url) unless current_user?(@user)
+    end
+
 end
